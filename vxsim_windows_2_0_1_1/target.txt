@@ -1,0 +1,195 @@
+\" FOR INTERNAL REFERNCE ONLY.
+\" This file should not be sent to customers. It is for internal reference ONLY.
+\"
+\" vxsim_windows/target.txt - VxSim Windows/Linux target-specific documentation
+\"
+\" Copyright (c) 1996,1999,2001-2005,2007,2014,2015 Wind River Systems, Inc.
+\"
+\" The right to copy, distribute, modify or otherwise make use of this
+\" software may be licensed only pursuant to the terms of an applicable
+\" Wind River license agreement.
+\"
+\"
+\TITLE VxSim Windows/Linux - Wind River VxWorks Simulator for Windows and Linux
+
+INTRODUCTION
+This reference entry provides target-specific information necessary to run
+the Wind River VxWorks Simulator (aka VxSim) on Windows and Linux.
+
+STARTING VXSIM
+The vxsim application performs the VxWorks bootrom simulation. It consists
+of handling the boot parameters, loading VxWorks image, allocating memory
+and controlling the reboot. On a real target, the boot parameters can be
+specified via the VxWorks boot prompt (part of VxWorks bootrom).  On
+VxWorks Simulator, all the parameters available in the standard VxWorks
+boot line can be specified via vxsim application options.
+
+To start the VxWorks Simulator with default options, if VxWorks image is in the
+current working directory, run the following command:
+\cs
+    vxsim
+\ce
+Otherwise
+\cs
+    vxsim -f <file name> | -file <file name>
+\ce
+
+To show the list of VxWorks Simulator command line options, run the command:
+\cs
+    vxsim -help
+\ce
+For further information about launching VxWorks Simulator, please refer to
+\tb Wind River VxWorks Simulator User's Guide: Getting Started .
+
+VXSIM MEMORY CONFIGURATION
+To specify the VxWorks memory size (memory available for VxWorks), use the
+memory configuration parameters VXSIM_KERNEL_SYS_MEM_RGN_BASE,
+VXSIM_KERNEL_SYS_MEM_RGN_SIZE, VXSIM_RTP_PRIVATE_RGN_SIZE,
+VXSIM_SHARED_RGN_SIZE and VXSIM_KERNEL_VIRT_POOL_RGN_SIZE
+
+DEVICES
+\sh Standard Input/Ouput
+A sio driver is provided for standard input and output.
+On Unix simulators, Unix job control characters are enabled
+even when the I/O is in raw mode. Trapping of control characters like ^Z
+is UNIX-shell specific and does not conform to the usual VxWorks tyLib
+conventions. Trapping of ^C character is performed by the Kernel Shell
+when included.
+
+\sh Virtual disk
+A virtual disk is available to emulate a VxWorks disk by using a single host
+file. The virtual disk is a raw disk that can be used for VxWorks or user
+defined file systems. This feature is enabled when the INCLUDE_VIRTUAL_DISK
+component is included in the VxWorks image.  It is possible to create as many
+disks as necessary. For further information, please refer to
+\tb Pass Through File System
+section of
+\tb Wind River VxWorks Simulator User's Guide: Hardware Simulation .
+
+\sh Host Serial Input/Ouput driver
+The hostSio driver is available to access one of the host serial devices from
+VxWorks Simulator.  By default, this feature is not included. To add the host
+serial device support, the component INCLUDE_HOST_SIO must be defined into the
+BSP configuration. Then, you can edit hostsio device section in
+<vip>/vxsim_windows-<version>/vxsim.dts file to select which host serial device
+to use. Port 0 means host device COM1, port 1 means COM2... Default baud rate
+is 9600, it can be modified for instance by adding "baud = < 19200 >;".
+Once INCLUDE_HOST_SIO component is included, a VxWorks device
+/tyCo/<channelNum> is created and connected to configured host device during
+boot sequence.  <channelNum> is usually 1 as /tyCo/0 is vxsim console. The
+device can then be controlled through usual VxWorks APIs: open(), read(),
+write(), ioctl(), close().
+
+\sh Timer
+As any VxWorks target, VxWorks Simulator provides a system and an auxiliary
+clocks. The macros SYS_CLK_RATE_MIN, SYS_CLK_RATE_MAX, AUX_CLK_RATE_MIN and
+AUX_CLK_RATE_MAX are defined to provide parameter checking for the
+sysClkRateSet() and sysAuxClkRateSet() routines. To get accurate results
+system clock rate should not exceed host clock rate (usually 100 ticks/sec).
+
+`NOTE:' VxWorks Simulator clock can be impacted by the activity on your
+machine if the VxWorks Simulator process is preempted by another process. In
+such a case, the current activity of each VxWorks task is delayed by an
+interval of time corresponding to the preempted time of process.
+
+\sh File system
+The default file system is the pass-through file system (`passFs'), which is
+unique to VxWorks Simulator. The INCLUDE_PASSFS component is included by
+default to mount this file system on startup.
+`PassFs' is a file-oriented device driver which provides an easy access to the
+host file system. To specify the passFs device name (default : \<host name\>),
+use the command line option:
+\cs
+vxsim -hn <host name> | -hostname <host name>
+\ce
+The default value for the passFs device name for Unix is the name of the host
+running simulator. On Windows, for backward compatibility with previous
+releases, the default value is "host".
+
+The VxWorks syntax to access a host file system is summarize in the following
+table:
+\ts
+Host      | passFs syntax                        | Example
+-------------------------------------------------------------------------------
+`Unix'    | \<passFs device\>:/dir/file          | -> ls "myhost:/myDir/myFile" (Assuming "myhost" is the host running VxSim)
+-------------------------------------------------------------------------------
+`Windows' | \<passFs device\>:/\<disk\>/dir/file | -> ls "host:/c/myDir/myFile"
+-------------------------------------------------------------------------------
+\te
+
+`NOTE:' PassFs is using Unix like path separator even on Windows simulator.
+For further information, please refer to
+\tb Pass Through File System
+section of
+\tb Wind River VxWorks Simulator User's Guide: Hardware Simulation .
+
+For further information about hardware device simulation, please refer to
+\tb Wind River VxWorks Simulator User's Guide: Hardware Simulation .
+
+NETWORKING
+VxWorks Simulator provides full network capability. A VxWorks network END
+driver called simnet is available to allow VxWorks Simulator to connect to
+one or several sub-networks.
+
+For further information, please refer to
+\tb Wind River VxWorks Simulator User's Guide: Networking with the VxWorks Simulator ,
+\tb Wind River Network Stack Programmer's Guide .
+
+TIMESTAMP DRIVER
+The timestamp driver is used to extend the range of information available
+from VxWorks kernel instrumentation. For example, if the timestamp driver
+is available, a precise time line can be displayed by WindView. VxWorks
+Simulator contains a system-defined timestamp driver. This feature is
+selected (this is the default) by including INCLUDE_TIMESTAMP and
+INCLUDE_SYS_TIMESTAMP components in your VxWorks image.
+
+`NOTE:' WindView graph can be impacted by the activity on your host
+machine if the VxWorks Simulator process is preempted by another process.
+In such a case, the current activity of each VxWorks task is delayed by an
+interval of time corresponding to the preempted time of process.
+
+NVRAM
+The Non-volatile RAM is simulated by a host file accessed by the
+sysNvRamGet()/sysNvRamSet() APIs.
+
+The default non volatile ram file is located in the same directory than the
+VxWorks image and is named:
+\cs
+nvram.<VxWorks image name><processor number>
+\ce
+The following command line option is available to specify another NVRAM host
+file location:
+\cs
+vxsim -n <file name> | -nvram <file name>.
+\ce
+Deleting the host file manually cleans the non-volatile RAM content. A new
+file will be created by the next simulator startup.
+
+As with any VxWorks target, the non-volatile RAM default size is defined to 256
+bytes. To tune the NVRAM default size, the macro NV_RAM_SIZE is available into
+the BSP configuration and in the project facility. After a non-volatile RAM
+default size modification, the host file is resized during VxWorks Simulator
+startup.
+
+`NOTE:' The boot parameters set via `vxsim' command line options, or using
+bootChange() are saved in the Non-volatile RAM, but they are not preserved
+when the simulator is stopped and restarted.
+
+FLOATING POINT
+Floating point support is available in VxWorks Simulator.
+
+CACHE SUPPORT
+The cache support is simulated by VxWorks Simulator, the supported mode is
+the CACHE_COPYBACK mode.
+
+SPECIAL CONSIDERATIONS
+To exit the simulator type '^\\' (quit) on Unix, or close the simulator window
+on Windows. To exit the simulator programmatically use reboot() with
+BOOT_NO_AUTOBOOT(1) parameter.
+
+The VxWorks Simulator memory is preserved after a simulator reboot.
+
+.SH "SEE ALSO"
+\tb Wind River Workbench User's Guide: Projects ,
+\tb VxWorks Application Programmer's Guide ,
+\tb Wind River VxWorks Simulator User's Guide .

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+    	
+    <storageModule moduleId="org.eclipse.cdt.core.settings">
+        		
+        <buildSystem id="Simulator LLVM">
+            			
+            <storageModule id="Simulator LLVM" moduleId="org.eclipse.cdt.core.settings"/>
+            		
+        </buildSystem>
+        		
+        <cconfiguration id="Simulator LLVM">
+            			
+            <storageModule id="Simulator LLVM" moduleId="defaultConfigurationDataProvider" name="Simulator LLVM">
+                				
+                <sourceEntries/>
+                				
+                <folderData id="Simulator LLVM.1753926529" name="" path="">
+                    					
+                    <languageData contentTypeIds="org.eclipse.cdt.core.cSource;org.eclipse.cdt.core.cHeader" id="Simulator LLVM.1753926529.1390407036" languageId="com.windriver.cdt.core.wrLlvmC" name="Wind River LLVM C" supportedEntryKinds="includePath;includeFile;macro;macroFile">
+                        						
+                        <settingEntries/>
+                        					
+                    </languageData>
+                    					
+                    <languageData contentTypeIds="org.eclipse.cdt.core.cxxSource;org.eclipse.cdt.core.cxxHeader" id="Simulator LLVM.1753926529.1880562043" languageId="com.windriver.cdt.core.wrLlvmCpp" name="Wind River LLVM C++" supportedEntryKinds="includePath;includeFile;macro;macroFile">
+                        						
+                        <settingEntries/>
+                        					
+                    </languageData>
+                    				
+                </folderData>
+                				
+                <buildData id="Simulator LLVM.2025838907"/>
+                				
+                <targetPlatformData binaryParsers="com.windriver.ide.core.WRElfParserVxWorks;org.eclipse.cdt.core.GNU_ELF" id="Simulator LLVM.711187262"/>
+                			
+            </storageModule>
+            			
+            <storageModule buildSystemId="com.windriver.cdt.core.WRLlvmCfgDataProvider" id="Simulator LLVM" moduleId="org.eclipse.cdt.core.settings" name="Simulator LLVM">
+                				
+                <externalSettings/>
+                				
+                <extensions>
+                    					
+                    <extension id="com.windriver.ide.core.WRElfParserVxWorks" point="org.eclipse.cdt.core.BinaryParser"/>
+                    					
+                    <extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+                    				
+                </extensions>
+                			
+            </storageModule>
+            			
+            <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+            		
+        </cconfiguration>
+        	
+    </storageModule>
+    	
+    <storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+    
+</cproject>

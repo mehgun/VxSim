@@ -1,0 +1,65 @@
+/* vxsim.dts - vxsim device source tree */
+
+/*
+ * Copyright (c) 2014-2018, 2020-2021 Wind River Systems, Inc.
+ *
+ * The right to copy, distribute, modify or otherwise make use
+ * of this software may be licensed only pursuant to the terms
+ * of an applicable Wind River license agreement.
+*/
+
+/dts-v1/;
+
+/  {
+   model = "VxSim";
+   compatible = "wrs,vxsim";
+   #address-cells = <1>;
+   #size-cells = <1>;
+   interrupt-parent = <&intc>;
+
+   soc {
+       device_type = "soc";
+       compatible = "simple-bus";
+
+       timer@0 {
+            compatible = "vxsim,timer";
+            interrupts = < 0 1 2 >;
+            interrupt-parent = <&intc>;
+       };
+
+       serial@0 {
+            compatible = "vxsim,serial";
+            description = "default";
+            interrupts = < 0 1 >;
+            interrupt-parent = <&intc>;
+       };
+
+       /* port 0 ttya/COM1, port 1 ttyb/COM2, baud can also be set */
+       hostsio@0 {
+            compatible = "vxsim,hostsio";
+            port = < 0 >;
+            interrupts = < 0 >;
+            interrupt-parent = <&intc>;
+       };
+
+       simnet@0 {
+            device_type = "network";
+            compatible = "vxsim,simnet";
+            interrupts = < 0 >;
+            interrupt-parent = <&intc>;
+       };
+
+       intc: interrupt-controller@0 {
+            compatible = "vxsim,intc";
+            interrupt-controller;
+        #interrupt-cells = <1>;
+       };
+
+       fbdev@0 {
+            compatible = "fbdev";
+            interrupts = < 0 >;
+            interrupt-parent = <&intc>;
+       };
+
+   };
+};

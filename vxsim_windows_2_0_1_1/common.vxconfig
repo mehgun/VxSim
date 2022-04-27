@@ -1,0 +1,26 @@
+################################################################################
+# common.vxconfig - VSB configuration flags and options for vxsim BSP
+#
+# Copyright (c) 2014, 2017, 2019, 2021 Wind River Systems, Inc.
+#
+# The right to copy, distribute, modify or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable Wind River license agreement.
+#
+#
+# DESCRIPTION
+# 
+# This file defines the VxWorks Source Build configuration options that apply
+# only to vxsim BSPs.
+#
+################################################################################
+
+config BDM_FLASH_DISABLED
+		bool
+		default y
+
+config BDM_NVRAM_DISABLED
+		bool
+		default y
+
+
